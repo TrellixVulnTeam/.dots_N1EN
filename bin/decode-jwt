@@ -1,0 +1,3 @@
+#!/bin/bash
+
+decode-base64-url $(echo -n $2 | cut -d "." -f $1) | jq .

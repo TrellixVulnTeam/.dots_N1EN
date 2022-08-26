@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -euo pipefail
+
+task +ACTIVE
+choice="$(task +ACTIVE export | jq -rM '.[] | [.id, .description] | @tsv ' | fzf)"
+task stop "$(echo "$choice" | awk '{ print $1 }')"

@@ -1,0 +1,44 @@
+#!/bin/bash
+
+cmd="$1"
+if [[ "$cmd" == onedark ]]; then
+  echo "Setting colors onedark"
+  printf "\\e]P0263238"
+  printf "\\e]P1546E7A"
+  printf "\\e]P2546E7A"
+  printf "\\e]P3546E7A"
+  printf "\\e]P4B2CCD6"
+  printf "\\e]P5EEFFFF"
+  printf "\\e]P6EEFFFF"
+  printf "\\e]P7FFFFFF"
+  printf "\\e]P8607178"
+  printf "\\e]P9F78C6C"
+  printf "\\e]PAFFCB6B"
+  printf "\\e]PBC3E88D"
+  printf "\\e]PC89DDFF"
+  printf "\\e]PD82AAFF"
+  printf "\\e]PEC792EA"
+  printf "\\e]PFFF5370"
+  exit 0
+fi
+
+if [[ "$cmd" == dracula ]]; then
+  echo "Setting colors dracula"
+  printf "\\e]P0282936"
+  printf "\\e]P13a3c4e"
+  printf "\\e]P24d4f68"
+  printf "\\e]P3626483"
+  printf "\\e]P462d6e8"
+  printf "\\e]P5e9e9f4"
+  printf "\\e]P6f1f2f8"
+  printf "\\e]P7f7f7fb"
+  printf "\\e]P8ea51b2"
+  printf "\\e]P9b45bcf"
+  printf "\\e]PA00f769"
+  printf "\\e]PBebff87"
+  printf "\\e]PCa1efe4"
+  printf "\\e]PD62d6e8"
+  printf "\\e]PEb45bcf"
+  printf "\\e]PF00f769"
+  exit 0
+fi

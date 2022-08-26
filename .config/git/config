@@ -1,0 +1,72 @@
+[user]
+  email = 9830961+OliverKnights@users.noreply.github.com
+  name = Oliver Knights
+[core]
+  editor = nvim
+  pager = less
+  excludesFile = ~/.config/git/ignore
+[merge]
+  conflictstyle = diff3
+[diff]
+    colorMoved = default
+[color]
+  ui = always
+[interactive]
+  singleKey = true
+  syntax-theme = Monokai Extended
+[status]
+  submoduleSummary = true
+[mergetool "nvim"]
+  cmd = nvim -d
+# set "nvim" as tool for merging
+[merge]
+  tool = nvim
+# automatically launch merge tool without displaying a prompt
+[mergetool]
+  prompt = false
+
+[diff]
+  tool = nvimdiff
+  guitool = meld
+; [difftool "nvimdiff"]
+;   cmd = "nvim -c 'syntax off' -c \"DirDiff $LOCAL $REMOTE\""
+[difftool "nvimdiff"]
+  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[difftool]
+  prompt = true
+
+[alias]
+  dt = difftool
+  dta = difftool --dir-diff
+  cne = commit --amend --no-edit
+  lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+[tig "bind"]
+    generic = D !git difftool --tool=nvimdiff --no-prompt --trust-exit-code %(commit)^!
+[push]
+  default = current
+[init]
+  templatedir = ~/.config/git/templates
+  defaultBranch = main
+[pull]
+  rebase = false
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
+; [color "diff-highlight"]
+;   oldNormal = brightred bold
+;   oldHighlight = brightred bold 52
+;   newNormal = green bold
+;   newHighlight = green bold 22
+; [color "diff"]
+;   meta = 11
+;   frag = magenta bold
+;   func = 146 bold
+;   commit = yellow bold
+;   old = red bold
+;   new = green bold
+;   whitespace = red reverse
+; [color "status"]
+;   changed = blue
+;   untracked = green
+;   added = green
+[diff "gpg"]
+	textconv = gpg --no-tty --decrypt

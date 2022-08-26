@@ -1,0 +1,5 @@
+syn match myTextHeader1 '_.*_\(\ {\+\d*\)*$' 
+syn match myTextString '\".*\"' 
+syn match myTextTask '-\ \[\ \]\ .*$' 
+" syn match myTextHeader2 '_.*_\(\ {\+\d*\)*$' 
+" syn match myTextHeader3 '\ \ \ \ .*\:$' 

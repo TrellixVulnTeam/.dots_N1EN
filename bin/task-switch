@@ -1,0 +1,26 @@
+#!/bin/bash
+
+source util.shlib
+
+set -euo pipefail
+
+function stop_active {
+  current_active="$(task +PENDING +ACTIVE export | jq -rM '.[].id')"
+  for task in $current_active; do
+    task stop "$task"
+  done
+}
+
+function choose_task {
+  task +PENDING -ACTIVE export | jq -rM '.[] | [.id, .description] | @tsv ' | fzf --tac | awk '{ print $1 }'
+}
+
+task_choice="$(choose_task)"
+stop_active
+task start "$task_choice"
+
+echo
+if ask_user 'Start pomodoro?'; then
+  $HOME/.dots/bin/pomodoro.sh
+fi
+

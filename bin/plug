@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+
+plug="${1}"
+location=~/.dots/vim-plugins/start/"${plug/*\/}"
+rm -rf "$location"
+git clone https://github.com/"$plug" "$location"
+rm -rf "$location"/.git/
+pushd ~/.dots/
+make sync
+git add "$location"
+git commit -m "Added vim plugin $plug"
+popd
+

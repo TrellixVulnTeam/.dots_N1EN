@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo -e "\u001b[40mBlack\u001b[0m"
+echo -e "\u001b[41mRed\u001b[0m"
+echo -e "\u001b[42mGreen\u001b[0m"
+echo -e "\u001b[43mYellow\u001b[0m"
+echo -e "\u001b[44mBlue\u001b[0m"
+echo -e "\u001b[45mMagenta\u001b[0m"
+echo -e "\u001b[46mCyan\u001b[0m"
+echo -e "\u001b[47mWhite\u001b[0m"
+echo -e "\u001b[40;1mBright Black\u001b[0m"
+echo -e "\u001b[41;1mBright Red\u001b[0m"
+echo -e "\u001b[42;1mBright Green\u001b[0m"
+echo -e "\u001b[43;1mBright Yellow\u001b[0m"
+echo -e "\u001b[44;1mBright Blue\u001b[0m"
+echo -e "\u001b[45;1mBright Magenta\u001b[0m"
+echo -e "\u001b[46;1mBright Cyan\u001b[0m"
+echo -e "\u001b[47;1mBright White\u001b[0m"

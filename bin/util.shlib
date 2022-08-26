@@ -1,0 +1,16 @@
+
+function get_highest_window {
+  tmux list-windows -F "#I" | tail -n1
+}
+
+function ask_user() {
+  question="$1"
+  echo "$question"
+  read -n1 -rp "[y|n]? " optional
+  if [[ "$optional" =~ y ]]; then
+    return 0
+  fi
+
+  return 1
+}
+

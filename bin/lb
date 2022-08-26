@@ -1,0 +1,57 @@
+#!/bin/bash
+
+last_entry_file=$HOME/.last-lb-entry
+logbook="$HOME/logbook.txt"
+
+cmd="$1"
+
+# Print last 50 lines to get context for what I'm working on
+if [[ -z "$cmd" ]]; then
+  tail -n50 $logbook
+  exit 0
+fi
+
+if [[ "$cmd" == "d" ]]; then
+  line=$(tail -n1 $logbook)
+  read -r -p $"Deleting 1 line from $logbook: '$line' are You Sure? [Y/n] " input
+  case $input in
+    y)
+      logbook_tmp=/tmp/logbook.tmp
+      head -n -1 $logbook > $logbook_tmp ; mv $logbook_tmp $logbook
+      ;;
+    n)
+      echo "No change"
+      ;;
+    *)
+      echo "Invalid input..."
+      exit 1
+      ;;
+  esac
+  exit 0
+fi
+
+if [[ "$cmd" == "e" ]]; then
+  nvim + $logbook
+  exit 0
+fi
+
+function append_date() {
+  echo "$current_day" > $last_entry_file
+  echo "" >> $logbook
+  echo "## $(date)" >> $logbook
+  echo "" >> $logbook
+}
+
+last_day="$(cat $last_entry_file)" 2>/dev/null
+
+if [[ ! -f $last_entry_file ]]; then
+  append_date
+fi
+
+current_day="$(date +%d)"
+if [[ "$current_day" != "$last_day" ]]; then
+  append_date
+fi
+
+
+echo "$@" >> ~/logbook.txt

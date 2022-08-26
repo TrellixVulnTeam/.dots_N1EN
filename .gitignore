@@ -1,0 +1,12 @@
+.config/nvim/plugin/packer_compiled.lua
+.vim/view/*
+.vim/undo/*
+.vim/swap/*
+bin/td
+.vim/.netrwhist
+.mutt/com.*
+.config/gh/hosts.yml
+.config/op
+.config/configstore
+.config/dlv/.dbg_history
+.config/emacs/*

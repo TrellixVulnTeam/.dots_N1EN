@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -euo pipefail
+
+logbook="$HOME"/wiki/logbook.md
+
+current_task="$(tac "$logbook" | grep -m1 '^##\s\+.*$' | sed 's/^##\s\+//')"
+
+if [[ -z "$current_task" ]]; then
+  echo "none"
+  exit
+fi
+
+echo "${current_task}"
