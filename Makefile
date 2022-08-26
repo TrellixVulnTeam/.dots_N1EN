@@ -91,6 +91,7 @@ BREW_TARGETS := \
   nano \
   neovim \
   pinentry-mac \
+	proctools \
   reattach-to-user-namespace \
   ruby \
   screen \
@@ -164,7 +165,7 @@ git-install-fzf:
 	@rm -rf ~/.fzf
 	@git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 	@~/.fzf/install --all --xdg
-	@. ~/.bashrc
+	@source ~/.bashrc
 
 .PHONY: install-bash-completion
 install-bash-completion:
