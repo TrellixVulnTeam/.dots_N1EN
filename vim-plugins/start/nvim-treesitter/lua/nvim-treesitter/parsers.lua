@@ -44,6 +44,27 @@ local list = setmetatable({}, {
   end,
 })
 
+list.agda = {
+  install_info = {
+    url = "https://github.com/AusCyberman/tree-sitter-agda",
+    branch = "master",
+    files = { "src/parser.c", "src/scanner.cc" },
+    generate_requires_npm = true,
+  },
+  filetype = "agda",
+  maintainers = { "@Decodetalkers" },
+}
+
+list.meson = {
+  install_info = {
+    url = "https://github.com/Decodetalkers/tree-sitter-meson",
+    branch = "master",
+    files = { "src/parser.c" },
+  },
+  filetype = "meson",
+  maintainers = { "@Decodetalkers" },
+}
+
 list.qmljs = {
   install_info = {
     url = "https://github.com/yuja/tree-sitter-qmljs",
@@ -156,6 +177,15 @@ list.glsl = {
   install_info = {
     url = "https://github.com/theHamsta/tree-sitter-glsl",
     files = { "src/parser.c" },
+    generate_requires_npm = true,
+  },
+  maintainers = { "@theHamsta" },
+}
+
+list.hlsl = {
+  install_info = {
+    url = "https://github.com/theHamsta/tree-sitter-hlsl",
+    files = { "src/parser.c", "src/scanner.cc" },
     generate_requires_npm = true,
   },
   maintainers = { "@theHamsta" },
@@ -1144,6 +1174,28 @@ list.tiger = {
   },
   filetype = "tiger",
   maintainers = { "@ambroisie" },
+}
+
+list.sxhkdrc = {
+  install_info = {
+    url = "https://github.com/RaafatTurki/tree-sitter-sxhkdrc",
+    files = { "src/parser.c" },
+    branch = "master",
+    generate_requires_npm = false,
+    requires_generate_from_grammar = false,
+    filetype = "sxhkdrc",
+  },
+  maintainers = { "@RaafatTurki" },
+}
+
+list.gitignore = {
+  install_info = {
+    url = "https://github.com/shunsambongi/tree-sitter-gitignore",
+    files = { "src/parser.c" },
+    branch = "main",
+    requires_generate_from_grammar = true,
+  },
+  maintainers = { "@theHamsta" },
 }
 
 local M = {

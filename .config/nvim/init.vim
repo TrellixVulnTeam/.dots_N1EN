@@ -1,11 +1,11 @@
 " Settings {{{
-colorscheme mine
 set nocompatible " Don't try to imitate vi
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
 set directory^=$HOME/.vim/swap// " Put swapfiles in one place
 set noswapfile
 set foldmethod=syntax " Default to folding based on syntax
 set autoread " source file changes
+set formatoptions+=ro
 set background=dark
 set hidden " change buffers without saving
 set history=10000 " remember : commands
@@ -15,7 +15,7 @@ set infercase " smarter completion
 set mouse=a
 set inccommand=nosplit " show replacements in place
 set clipboard=unnamedplus " copy to system clipboard always
-set shortmess+=I
+set shortmess=a
 set tabpagemax=50
 set path=.,,
 set laststatus=2
@@ -74,6 +74,8 @@ let g:is_bash	= 1
 let g:netrw_banner = 0
 let g:netrw_list_hide = '^\.\.\/$,^\.\/$' " Hide current and parent directory 
 
+let g:rooter_silent_chdir = 1
+
 " Autocmds {{{1
 augroup myAugroup
   autocmd!
@@ -91,10 +93,10 @@ augroup myAugroup
   autocmd BufWinEnter ?* silent! loadview
 
   autocmd BufRead,BufNewFile profile_extra,aliases,*.shlib set filetype=sh
-  autocmd WinEnter,BufEnter * call statusline#active()
-  autocmd WinLeave,BufLeave * call statusline#inactive()
-  autocmd InsertEnter * call statusline#insert()
-  autocmd InsertLeave * call statusline#active()
+  " autocmd WinEnter,BufEnter * call statusline#active()
+  " autocmd WinLeave,BufLeave * call statusline#inactive()
+  " autocmd InsertEnter * call statusline#insert()
+  " autocmd InsertLeave * call statusline#active()
   autocmd CursorHold * checktime  
 
   autocmd FileType c,cpp setlocal path+=/usr/include include&
@@ -188,15 +190,21 @@ nnoremap <Leader>ts :lua tmux_send_markdown_code_block()<CR>
 nnoremap <Leader>td :lua tmux_send_line("C-d", true)<CR>
 nnoremap <Leader>tc :lua tmux_send_line("C-c", true)<CR>
 nnoremap <Leader>te :lua tmux_dispatch_filetype()<CR>
+nnoremap <Leader>to :TodoQuickFix<CR>
 
 " Go
 nnoremap <Leader>ga :GoTest ./...<CR>
 nnoremap <Leader>gp :GoTest<CR>
 nnoremap <Leader>gt :GoTestFunc<CR>
 
+nnoremap <Leader>dj <cmd>DirDiffNext<cr>
+nnoremap <Leader>dk <cmd>DirDiffPrev<cr>
+
 " Utils
 command! SingleSpaces %s/\s\+/\ /g
 nnoremap <Leader>um :!mkdir -p %:h<CR> " Make the directory for which the current file should be in
+" Copy current file name and line number
+nnoremap <Leader>up :redir @* \| echo expand("%:h") . '/' . expand("%:t") . ':' . line(".") \| redir END<CR>
 
 nnoremap <c-x><c-m> :term terminal-menu.sh<cr>
 

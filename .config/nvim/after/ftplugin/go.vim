@@ -1,5 +1,4 @@
 setlocal path=/usr/local/go/src/**/*.,**,$GOROOT/src
-setlocal foldmethod=syntax
 setlocal tags+=/usr/local/go/src/tags
 setlocal suffixesadd=.go,/
 setlocal include=^\\t\\%(\\w\\+\\s\\+\\)\\=\"\\zs[^\"]*\\ze\"$
@@ -82,3 +81,7 @@ endfunction
 
 nnoremap <Leader>gd <cmd>call ft#go#GoToDefinition()<cr>
 nnoremap <Leader>gf :silent grep --exclude-dir=vendor '^\t*\b\b' .<left><left><left><left><left><c-r><c-w><cr>
+
+" Use treesitter for folds
+setlocal foldmethod=expr
+setlocal foldexpr=nvim_treesitter#foldexpr()

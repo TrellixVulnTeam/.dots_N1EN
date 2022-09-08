@@ -145,113 +145,6 @@ function window_inactive()
 end
 
 
--- plugins
-
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local opts = { noremap=true, silent=true }
-vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lA', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lW', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lw', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-end
-
-lspconfig = require('lspconfig')
-
-local gopls_caps = vim.lsp.protocol.make_client_capabilities()
-
-lspconfig['gopls'].setup {
-  on_attach = on_attach,
-  settings = {
-    gopls = {
-      analyses = {
-        unusedparams = true,
-      },
-      staticcheck = true,
-    },
-  },
-  capabilities = gopls_caps,
-}
-
-lspconfig['tsserver'].setup {
-  on_attach = function(client, bufnr)
-    client.resolved_capabilities.document_formatting = false
-    client.resolved_capabilities.document_range_formatting = false
-    local ts_utils = require("nvim-lsp-ts-utils")
-    ts_utils.setup({})
-    ts_utils.setup_client(client)
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", { silent = true })
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspRenameFile<CR>", { silent = true })
-    vim.api.nvim_buf_set_keymap(bufnr, "n", "go", ":TSLspImportAll<CR>", { silent = true })
-    on_attach(client, bufnr)
-  end,
-}
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    signs = false,
-    virtual_text = false,
-  }
-)
-
-local on_attach = function(client, bufnr)
-  vim.cmd("command! LspDef lua vim.lsp.buf.definition()")
-  vim.cmd("command! LspFormatting lua vim.lsp.buf.formatting()")
-  vim.cmd("command! LspCodeAction lua vim.lsp.buf.code_action()")
-  vim.cmd("command! LspHover lua vim.lsp.buf.hover()")
-  vim.cmd("command! LspRename lua vim.lsp.buf.rename()")
-  vim.cmd("command! LspRefs lua vim.lsp.buf.references()")
-  vim.cmd("command! LspTypeDef lua vim.lsp.buf.type_definition()")
-  vim.cmd("command! LspImplementation lua vim.lsp.buf.implementation()")
-  vim.cmd("command! LspDiagPrev lua vim.diagnostic.goto_prev()")
-  vim.cmd("command! LspDiagNext lua vim.diagnostic.goto_next()")
-  vim.cmd("command! LspDiagLine lua vim.diagnostic.open_float()")
-  vim.cmd("command! LspSignatureHelp lua vim.lsp.buf.signature_help()")
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", ":LspDef<CR>", { silent = true })
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "gy", ":LspTypeDef<CR>", { silent = true })
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "K", ":LspHover<CR>", { silent = true })
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "[a", ":LspDiagPrev<CR>", { silent = true })
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "]a", ":LspDiagNext<CR>", { silent = true })
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "ga", ":LspCodeAction<CR>", { silent = true })
-  vim.api.nvim_buf_set_keymap(bufnr, "n", "<Leader>a", ":LspDiagLine<CR>", { silent = true })
-  vim.api.nvim_buf_set_keymap(bufnr, "i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>", { silent = true })
-  if client.resolved_capabilities.document_formatting then
-    vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
-  end
-end
-
-local null_ls = require("null-ls")
-my_prettier = null_ls
-null_ls.builtins.formatting.prettier.disabled_filetypes = { "markdown", "yaml" }
-null_ls.setup({
-  sources = {
-    null_ls.builtins.diagnostics.eslint,
-    null_ls.builtins.code_actions.eslint,
-    null_ls.builtins.formatting.prettier
-  },
-  on_attach = on_attach
-})
 
 -- Symbols outline
 vim.g.symbols_outline = {
@@ -307,9 +200,189 @@ vim.g.symbols_outline = {
     }
 }
 
-require('gitsigns').setup()
+require('gitsigns').setup({
+  on_attach = function(bufnr)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>hs', '<cmd>lua require"gitsigns".stage_hunk()<CR>', {})
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>hS', '<cmd>lua require"gitsigns".stage_buffer()<CR>', {})
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>hu', '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>', {})
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>hR', '<cmd>lua require"gitsigns".reset_hunk()<CR>', {})
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>hR', '<cmd>lua require"gitsigns".reset_buffer()<CR>', {})
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>hn', '<cmd>lua require"gitsigns".next_hunk()<CR>', {})
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<Leader>hp', '<cmd>lua require"gitsigns".prev_hunk()<CR>', {})
+  end
+})
 
 require('telescope').setup{
   defaults = {
+    file_ignore_patterns = { "^.git$" }
+  },
+  pickers = {
+    find_files = {
+      hidden = true,
+      no_ignore = true,
+      no_ignore_parent = true,
+    },
+    live_grep = {
+      grep_open_files = false,
+    }
   }
 }
+
+require('lualine').setup{
+  theme = 'catppuccin',
+  sections = {
+    lualine_c = { "require'lsp-status'.status()", { 'filename', path = 2 } },
+  },
+  options = {
+    section_separators = { left = '', right = '' },
+    component_separators = { left = '', right = '' }
+  }
+}
+
+-- THESE NEED TO BE LOADED IN THIS ORDER
+lspstatus = require'lsp-status'
+lspstatus.register_progress()
+require("mason").setup()
+require("mason-lspconfig").setup()
+lspconfig = require('lspconfig')
+
+local caps = vim.lsp.protocol.make_client_capabilities()
+
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+local opts = { noremap=true, silent=true }
+vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+caps = vim.tbl_extend('keep', caps or {}, lspstatus.capabilities)
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  lspstatus.on_attach(client)
+
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lA', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lW', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lw', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ld', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lq', '<cmd>lua vim.lsp.diagnostic.set_qflist()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+end
+
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    signs = false,
+    virtual_text = false,
+  }
+)
+
+lspconfig['gopls'].setup {
+  on_attach = on_attach,
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+    },
+  },
+  capabilities = caps,
+}
+
+lspconfig['solargraph'].setup {
+  on_attach = on_attach
+}
+
+lspconfig['dockerls'].setup{
+  on_attach = on_attach
+}
+
+lspconfig['tsserver'].setup {
+  on_attach = function(client, bufnr)
+    client.resolved_capabilities.document_formatting = false
+    client.resolved_capabilities.document_range_formatting = false
+    local ts_utils = require("nvim-lsp-ts-utils")
+    ts_utils.setup({})
+    ts_utils.setup_client(client)
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", { silent = true })
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspRenameFile<CR>", { silent = true })
+    vim.api.nvim_buf_set_keymap(bufnr, "n", "go", ":TSLspImportAll<CR>", { silent = true })
+    on_attach(client, bufnr)
+  end,
+}
+
+local null_ls = require("null-ls")
+my_prettier = null_ls
+null_ls.builtins.formatting.prettier.disabled_filetypes = { "markdown", "yaml" }
+null_ls.setup({
+  sources = {
+    null_ls.builtins.diagnostics.eslint,
+    null_ls.builtins.code_actions.eslint,
+    null_ls.builtins.formatting.prettier
+  },
+  on_attach = on_attach
+})
+
+require('true-zen').setup{}
+
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "c", "lua", "rust", "go", "javascript", "typescript" },
+  auto_install = true,
+  highlight = {
+    enable = true,
+  }
+}
+
+require('treesitter-context').setup{}
+
+require('todo-comments').setup{}
+
+require('mind').setup{}
+
+require('autolist').setup{}
+
+require("coverage").setup{
+  lang = {
+    go = {
+      coverage_file = "cover.out"
+    }
+  }
+}
+
+require("which-key").setup{}
+
+vim.g.catppuccin_flavour = "latte" -- latte, frappe, macchiato, mocha
+require("catppuccin").setup()
+vim.cmd [[colorscheme catppuccin]]
+
+require'marks'.setup {
+  default_mappings = true,
+  signs = true,
+  mappings = {}
+}
+
+local home = os.getenv('HOME')
+local db = require('dashboard')
+db.preview_file_height = 11
+db.preview_file_width = 70
+db.custom_center = {
+    -- {icon = '  ', desc = 'Recently latest session                 ', shortcut = 'SPC s l', action ='SessionLoad'},
+    -- {icon = '  ', desc = 'Recently opened files                   ', action = 'DashboardFindHistory', shortcut = 'SPC f h'},
+    {icon = '  ', desc = 'Find  File                                 ', action = 'Telescope find_files find_command=rg,--hidden,--files', shortcut = 'g l'},
+    -- {icon = '  ', desc = 'File Browser                            ', action = 'Telescope file_browser', shortcut = 'SPC f b'},
+    {icon = '  ', desc = 'Find  word                              ', action = 'Telescope live_grep', shortcut = 'SPC g r'},
+    -- {icon = '  ', desc = 'Open Personal dotfiles                  ', action = 'Telescope dotfiles path=' .. home ..'/.dots', shortcut = 'SPC v i'},
+  }

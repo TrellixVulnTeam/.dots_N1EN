@@ -100,7 +100,7 @@ color13='\[\033[01;31m\]'
 color14='\[\033[01;37m\]'
 color15='\[\033[01;33m\]'
 esc='\[\033[00m\]'
-PS1="$color15"'$([ \j -gt 0 ] && echo [\j])'"${esc}${color11}"'\u@\H'"$esc"' '"$color9"'\W'"$esc"'\$ '
+PS1="$color15"'$([ \j -gt 0 ] && echo [\j])'"${esc}${color10}"'\u@\H'"$esc"' '"$color3"'\W'"$esc"'\$ '
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -168,10 +168,6 @@ alias ll='ls -alF'
 alias js='jobs'
 
 alias nnn='nnn -H -e'
-
-alias vi='nvim'
-alias vim='nvim'
-alias nvi='nvim'
 
 alias g="git"
 alias k="kubectl"

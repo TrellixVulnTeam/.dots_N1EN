@@ -115,7 +115,13 @@ install-macos: install-brew install-brew-packages install-go-packages ## install
 
 .PHONY: install-brew-packages
 install-brew-packages:
+	@brew tap homebrew/cask-fonts
+	@brew install --cask font-jetbrains-mono-nerd-font
 	@brew install $(BREW_TARGETS)
+
+.PHONY: nvim-install-dependencies
+nvim-install-dependencies:
+	@nvim --headless -c "MasonInstall gopls typescript-language-server dockerfile-language-server" -c "qall"
 
 .PHONY: update-macos
 update-macos: install-brew install-go-packages ## update macos
@@ -136,7 +142,6 @@ install-go-packages: ## install go packages
 	go install github.com/posener/complete/gocomplete@latest
 	go install github.com/rogpeppe/godef@latest
 	go install golang.org/x/tools/...@latest
-	go install golang.org/x/tools/gopls@latest
 
 .PHONY: install-nvm
 install-nvm:

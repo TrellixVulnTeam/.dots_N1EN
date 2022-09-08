@@ -28,10 +28,8 @@
 [diff]
   tool = nvimdiff
   guitool = meld
-; [difftool "nvimdiff"]
-;   cmd = "nvim -c 'syntax off' -c \"DirDiff $LOCAL $REMOTE\""
 [difftool "nvimdiff"]
-  cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+  cmd = "nvim -c \"DirDiff $LOCAL $REMOTE\""
 [difftool]
   prompt = true
 
